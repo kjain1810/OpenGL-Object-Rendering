@@ -55,8 +55,6 @@ Object createDecagonalPrism()
         for (int b = 3; b < 6; b++)
             verts[6 * a + b] = getCol();
     }
-    for (int a = 0; a < sdt / 3; a++)
-        std::cout << dt[3 * a] << " " << dt[3 * a + 1] << " " << dt[3 * a + 2] << "\n";
     float vertices[6 * sdt];
     for (int a = 0; a < sdt; a++)
     {
@@ -141,10 +139,10 @@ Object createHexDiPyramid()
     float sq3 = glm::sqrt(3.0f) / 2.0f;
     float vertices[] = {
         0.0f, 1.0f, 0.0f,
-        sq3, -0.5f, 0.0f,
+        -sq3, 0.5f, 0.0f,
         -sq3, -0.5f, 0.0f,
         0.0f, -1.0f, 0.0f,
-        -sq3, 0.5f, 0.0f,
+        sq3, -0.5f, 0.0f,
         sq3, 0.5f, 0.0f,
         0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, -1.0f};
@@ -169,23 +167,17 @@ Object createHexDiPyramid()
         for (int b = 3; b < 6; b++)
             verts[6 * a + b] = getCol();
     }
-    for (int a = 2; a < 17; a += 3)
-        for (int b = 3; b < 6; b++)
-            verts[a * 6 + b] = verts[(a + 2) * 6 + b];
-    for (int a = 22; a < 35; a += 3)
-        for (int b = 3; b < 6; b++)
-            verts[a * 6 + b] = verts[(a + 2) * 6 + b];
-    for (int a = 3; a <= 15; a += 3)
-        for (int b = 3; b < 6; b++)
-            verts[a * 6 + b] = verts[b];
-    for (int a = 21; a <= 33; a += 3)
-        for (int b = 3; b < 6; b++)
-            verts[a * 6 + b] = verts[18 + b];
-    for (int a = 0; a < 36; a++)
-    {
-        for (int b = 0; b < 6; b++)
-            std::cout << verts[6 * a + b] << " ";
-        std::cout << "\n";
-    }
+    // for (int a = 2; a < 17; a += 3)
+    //     for (int b = 3; b < 6; b++)
+    //         verts[a * 6 + b] = verts[(a + 2) * 6 + b];
+    // for (int a = 22; a < 35; a += 3)
+    //     for (int b = 3; b < 6; b++)
+    //         verts[a * 6 + b] = verts[(a + 2) * 6 + b];
+    // for (int a = 3; a <= 15; a += 3)
+    //     for (int b = 3; b < 6; b++)
+    //         verts[a * 6 + b] = verts[b];
+    // for (int a = 21; a <= 33; a += 3)
+    //     for (int b = 3; b < 6; b++)
+    //         verts[a * 6 + b] = verts[18 + b];
     return Object(36 * 6, verts);
 }

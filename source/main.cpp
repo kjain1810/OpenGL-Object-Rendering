@@ -139,7 +139,7 @@ int main()
     glUseProgram(shaderProgram);
     //glm stuff
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     glm::mat4 view = glm::mat4(1.0f);
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     glm::mat4 projection = glm::mat4(1.0f);
@@ -194,21 +194,18 @@ int processInput(GLFWwindow *window, int &cur, Object objects[])
         if (cur == 0)
             return 0;
         cur = 0;
-        return 1;
     }
     else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
     {
         if (cur == 1)
             return 0;
         cur = 1;
-        return 1;
     }
     else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
     {
         if (cur == 2)
             return 0;
         cur = 2;
-        return 1;
     }
     else
         return 0;
