@@ -9,13 +9,6 @@
 #include "object.hpp"
 #include "utils.hpp"
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-int processInput(GLFWwindow *, int &, Object[]);
-
-// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
-
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
                                  "layout (location = 1) in vec3 aColor;\n"
@@ -37,6 +30,13 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "{\n"
                                    "   FragColor = vec4(ourColor, 1.0f);\n"
                                    "}\n\0";
+
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+int processInput(GLFWwindow *, int &, glm::mat4 &, glm::mat4 &, Object[]);
+
+// settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
@@ -127,19 +127,15 @@ int main()
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     objects[cur].bindBuffer(VAO, VBO);
 
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-    // unsigned int IBO;
-    // glGenBuffers(1, &IBO);
-    // first parameter is for number of buffer objects to create
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    // obj.bindIndexArray(IBO);
-
     // as we only have a single shader, we could also just activate our shader once beforehand if we want to
     glUseProgram(shaderProgram);
-    //glm stuff
 
-    objects[cur].applyMVP(shaderProgram);
+    //glm stuff
+    glm::mat4 view = glm::mat4(1.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
+    glm::mat4 projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
+    objects[cur].applyMVP(shaderProgram, view, projection);
     float ch = -0.01;
 
     // render loop
@@ -148,10 +144,10 @@ int main()
     {
         // input
         // -----
-        int pressed = processInput(window, cur, objects);
+        int pressed = processInput(window, cur, view, projection, objects);
         if (pressed)
         {
-            objects[cur].applyMVP(shaderProgram);
+            objects[cur].applyMVP(shaderProgram, view, projection);
             objects[cur].bindBuffer(VAO, VBO);
         }
         // render
@@ -160,8 +156,6 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         objects[cur].draw(VAO);
-        // glBindVertexArray(VAO);
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -183,28 +177,16 @@ int main()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-int processInput(GLFWwindow *window, int &cur, Object objects[])
+int processInput(GLFWwindow *window, int &cur, glm::mat4 &view, glm::mat4 &projection, Object objects[])
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    else if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
-    {
-        if (cur == 0)
-            return 0;
+    else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && cur != 0)
         cur = 0;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-    {
-        if (cur == 1)
-            return 0;
+    else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && cur != 1)
         cur = 1;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-    {
-        if (cur == 2)
-            return 0;
+    else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && cur != 2)
         cur = 2;
-    }
     else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         objects[cur].moveXn();
     else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
@@ -219,6 +201,18 @@ int processInput(GLFWwindow *window, int &cur, Object objects[])
         objects[cur].moveZp();
     else if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
         objects[cur].rotate();
+    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(0.01f, 0.0f, 0.0f));
+    else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(-0.01f, 0.0f, 0.0f));
+    else if (glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.01f));
+    else if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -0.01f));
+    else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(0.0f, 0.01f, 0.0f));
+    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        view = glm::translate(view, glm::vec3(0.0f, -0.01f, 0.0f));
     else
         return 0;
     return 1;

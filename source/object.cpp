@@ -17,10 +17,6 @@ Object::Object(int sv, float *av)
         allVertices[a] = av[a];
     model = glm::mat4(1.0f);
     model = glm::rotate(model, glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
-    projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
 }
 
 void Object::bindBuffer(unsigned int VAO, unsigned int VBO)
@@ -28,10 +24,8 @@ void Object::bindBuffer(unsigned int VAO, unsigned int VBO)
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, size_allVertices * 6 * sizeof(float), allVertices, GL_STATIC_DRAW);
-    // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-    // color attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 }
@@ -42,7 +36,7 @@ void Object::draw(unsigned int VAO)
     glDrawArrays(GL_TRIANGLES, 0, size_allVertices / 6);
 }
 
-void Object::applyMVP(unsigned int shaderProgram)
+void Object::applyMVP(unsigned int shaderProgram, glm::mat4 view, glm::mat4 projection)
 {
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &model[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
