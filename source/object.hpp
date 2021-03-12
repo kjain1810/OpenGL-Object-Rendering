@@ -27,4 +27,5 @@ public:
     void rotate();
     void recenter();
     void rotateCamera(Camera &);
+    void predef(int, Camera &);
 };

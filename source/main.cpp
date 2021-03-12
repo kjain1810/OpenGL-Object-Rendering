@@ -215,6 +215,12 @@ int processInput(GLFWwindow *window, int &cur, Camera &cam, glm::mat4 &projectio
         cam.moveZp();
     else if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
         objects[cur].rotateCamera(cam);
+    else if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+        objects[cur].predef(1, cam);
+    else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+        objects[cur].predef(2, cam);
+    else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+        objects[cur].predef(3, cam);
     else
         return 0;
     return 1;

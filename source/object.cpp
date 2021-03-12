@@ -92,3 +92,36 @@ void Object::rotateCamera(Camera &cam)
     cam.cameraPos = glm::vec3(1.0f, 3 * glm::cos(glm::radians(cam.angle)), 3 * glm::sin(glm::radians(cam.angle)));
     cam.makeView();
 }
+
+void Object::predef(int i, Camera &cam)
+{
+    if (i <= 0 || i >= 4)
+        return;
+    if (i == 1)
+    {
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.3f, 0.3f, 0.3f));
+        cam.cameraPos = glm::vec3(0.0f, 1.0f, -6.0f);
+        cam.cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
+        cam.cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+        cam.makeView();
+    }
+    else if (i == 2)
+    {
+        model = glm::mat4(1.0f);
+        model = glm::rotate(model, glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 1.0f));
+        cam.cameraPos = glm::vec3(1.0f, 1.0f, -4.0f);
+        cam.cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
+        cam.cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+        cam.makeView();
+    }
+    else if (i == 3)
+    {
+        model = glm::mat4(1.0f);
+        model = glm::rotate(model, glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        cam.cameraPos = glm::vec3(1.0f, 1.0f, -4.0f);
+        cam.cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
+        cam.cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+        cam.makeView();
+    }
+}
