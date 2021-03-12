@@ -82,7 +82,7 @@ Object createDecagonalPrism()
         for (int b = 3; b < 6; b++)
             vertices[(a + 1) * 6 + b] = vertices[(a + 3) * 6 + b];
     }
-    return Object(6 * sdt, vertices);
+    return Object(6 * sdt, vertices, 20);
 }
 
 Object createSqPyramid()
@@ -131,7 +131,7 @@ Object createSqPyramid()
         for (int b = 3; b < 6; b++)
             av[(a + 2) * 6 + b] = av[(a + 4) * 6 + b];
     }
-    return Object(48 * 6, av);
+    return Object(48 * 6, av, 10);
 }
 
 Object createHexDiPyramid()
@@ -167,5 +167,5 @@ Object createHexDiPyramid()
         for (int b = 3; b < 6; b++)
             verts[6 * a + b] = getCol();
     }
-    return Object(36 * 6, verts);
+    return Object(36 * 6, verts, 8);
 }

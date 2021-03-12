@@ -8,6 +8,7 @@
 
 #include "object.hpp"
 #include "utils.hpp"
+#include "camera.hpp"
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -32,7 +33,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "}\n\0";
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-int processInput(GLFWwindow *, int &, glm::mat4 &, glm::mat4 &, Object[]);
+int processInput(GLFWwindow *, int &, Camera &, glm::mat4 &, Object[]);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -131,11 +132,10 @@ int main()
     glUseProgram(shaderProgram);
 
     //glm stuff
-    glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
+    Camera cam;
     glm::mat4 projection = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
-    objects[cur].applyMVP(shaderProgram, view, projection);
+    objects[cur].applyMVP(shaderProgram, cam, projection);
     float ch = -0.01;
 
     // render loop
@@ -144,10 +144,10 @@ int main()
     {
         // input
         // -----
-        int pressed = processInput(window, cur, view, projection, objects);
+        int pressed = processInput(window, cur, cam, projection, objects);
         if (pressed)
         {
-            objects[cur].applyMVP(shaderProgram, view, projection);
+            objects[cur].applyMVP(shaderProgram, cam, projection);
             objects[cur].bindBuffer(VAO, VBO);
         }
         // render
@@ -177,7 +177,7 @@ int main()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-int processInput(GLFWwindow *window, int &cur, glm::mat4 &view, glm::mat4 &projection, Object objects[])
+int processInput(GLFWwindow *window, int &cur, Camera &cam, glm::mat4 &projection, Object objects[])
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -187,32 +187,35 @@ int processInput(GLFWwindow *window, int &cur, glm::mat4 &view, glm::mat4 &proje
         cur = 1;
     else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && cur != 2)
         cur = 2;
-    else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        objects[cur].moveXn();
     else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        objects[cur].moveXn();
+    else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         objects[cur].moveXp();
-    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        objects[cur].moveYn();
-    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        objects[cur].moveYp();
     else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-        objects[cur].moveZn();
+        objects[cur].moveYn();
     else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        objects[cur].moveYp();
+    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        objects[cur].moveZn();
+    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         objects[cur].moveZp();
     else if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
         objects[cur].rotate();
-    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        view = glm::translate(view, glm::vec3(0.01f, 0.0f, 0.0f));
-    else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        view = glm::translate(view, glm::vec3(-0.01f, 0.0f, 0.0f));
     else if (glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.01f));
+        cam.moveYn();
     else if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -0.01f));
+        cam.moveYp();
+    else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        cam.moveXn();
+    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        cam.moveXp();
     else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-        view = glm::translate(view, glm::vec3(0.0f, 0.01f, 0.0f));
+        cam.moveZn();
     else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        view = glm::translate(view, glm::vec3(0.0f, -0.01f, 0.0f));
+        cam.moveZp();
+    else if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+    {
+    }
     else
         return 0;
     return 1;
