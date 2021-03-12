@@ -9,6 +9,7 @@ public:
     glm::vec3 cameraFront;
     glm::vec3 cameraUp;
     glm::mat4 view;
+    float angle;
     Camera();
     void makeView();
     void moveXn();

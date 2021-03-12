@@ -214,8 +214,7 @@ int processInput(GLFWwindow *window, int &cur, Camera &cam, glm::mat4 &projectio
     else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
         cam.moveZp();
     else if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-    {
-    }
+        objects[cur].rotateCamera(cam);
     else
         return 0;
     return 1;

@@ -77,3 +77,18 @@ void Object::rotate()
 {
     model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 }
+
+void Object::recenter()
+{
+    model = glm::rotate(model, glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+}
+
+void Object::rotateCamera(Camera &cam)
+{
+    // recenter();
+    cam.angle += 1.0f;
+    if (cam.angle >= 360.0f)
+        cam.angle -= 360.0f;
+    cam.cameraPos = glm::vec3(1.0f, 3 * glm::cos(glm::radians(cam.angle)), 3 * glm::sin(glm::radians(cam.angle)));
+    cam.makeView();
+}

@@ -17,7 +17,7 @@ public:
     void bindBuffer(unsigned int VAO, unsigned int VBO);
     void bindIndexArray(unsigned int IBO);
     void draw(unsigned int VAO);
-    void applyMVP(unsigned int shaderProgram, Camera, glm::mat4);
+    void applyMVP(unsigned int, Camera, glm::mat4);
     void moveXn();
     void moveXp();
     void moveYn();
@@ -25,4 +25,6 @@ public:
     void moveZn();
     void moveZp();
     void rotate();
+    void recenter();
+    void rotateCamera(Camera &);
 };

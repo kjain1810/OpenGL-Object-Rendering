@@ -2,13 +2,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "camera.hpp"
+#include "object.hpp"
 
 Camera::Camera()
 {
-    cameraPos = glm::vec3(0.0f, 0.0f, -4.0f);
+    cameraPos = glm::vec3(1.0f, 1.0f, -4.0f);
     cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
     cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
     view = glm::lookAt(cameraPos, cameraFront, cameraUp);
+    angle = 0.0f;
 }
 
 void Camera::makeView()
