@@ -6,13 +6,8 @@ class Object
 {
 private:
 public:
-    int num_vertices;
-    float *vertices;
-    unsigned int *drawTable;
-    int size_drawTable;
     float *allVertices;
     int size_allVertices;
-    Object(int, float *, unsigned int *, int);
     Object(int, float *);
     void printAll();
     void bindBuffer(unsigned int VAO, unsigned int VBO);

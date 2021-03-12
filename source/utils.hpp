@@ -3,5 +3,5 @@
 #include "object.hpp"
 
 Object createDecagonalPrism();
-Object createCube();
 Object createSqPyramid();
+Object createHexDiPyramid();

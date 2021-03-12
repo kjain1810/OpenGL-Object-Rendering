@@ -10,108 +10,6 @@ float getCol()
     return (float)(rand() % 256) / 256.0f;
 }
 
-Object createCube()
-{
-    float vertices[] = {
-        // positions         // colors
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom right
-        -0.5f,
-        -0.5f,
-        0.5f,
-        0.0f,
-        1.0f,
-        0.0f, // bottom left
-        0.5f,
-        0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-        1.0f, // top right
-        -0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        1.0f,
-        1.0f, // top left
-
-        0.5f,
-        -0.5f,
-        -0.5f,
-        1.0f,
-        0.0f,
-        0.0f, // bottom right
-        -0.5f,
-        -0.5f,
-        -0.5f,
-        0.0f,
-        1.0f,
-        0.0f, // bottom left
-        0.5f,
-        0.5f,
-        -0.5f,
-        0.0f,
-        0.0f,
-        1.0f, // top right
-        -0.5f,
-        0.5f,
-        -0.5f,
-        1.0f,
-        1.0f,
-        1.0f, // top left
-
-        0.5f,
-        0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-        1.0f, // top right
-        0.5f,
-        0.5f,
-        -0.5f,
-        0.0f,
-        0.0f,
-        1.0f, // top right
-        0.5f,
-        -0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        0.0f, // bottom right
-        0.5f,
-        -0.5f,
-        -0.5f,
-        1.0f,
-        0.0f,
-        0.0f, // bottom right
-
-        -0.5f,
-        0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-        1.0f, // top right
-        -0.5f,
-        0.5f,
-        -0.5f,
-        0.0f,
-        0.0f,
-        1.0f, // top right
-        -0.5f,
-        -0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        0.0f, // bottom right
-        -0.5f,
-        -0.5f,
-        -0.5f,
-        1.0f,
-        0.0f,
-        0.0f};
-    unsigned int indices[] = {0, 1, 2, 2, 1, 3, 4, 5, 6, 6, 5, 7, 8, 9, 10, 9, 10, 11, 12, 13, 14, 13, 14, 15};
-    return Object(sizeof(vertices) / (6 * sizeof(float)), vertices, indices, 24);
-}
-
 Object createDecagonalPrism()
 {
     int nv = 20;
@@ -236,5 +134,58 @@ Object createSqPyramid()
             av[(a + 2) * 6 + b] = av[(a + 4) * 6 + b];
     }
     return Object(48 * 6, av);
-    // return Object(10, vertices, dt, 48);
+}
+
+Object createHexDiPyramid()
+{
+    float sq3 = glm::sqrt(3.0f) / 2.0f;
+    float vertices[] = {
+        0.0f, 1.0f, 0.0f,
+        sq3, -0.5f, 0.0f,
+        -sq3, -0.5f, 0.0f,
+        0.0f, -1.0f, 0.0f,
+        -sq3, 0.5f, 0.0f,
+        sq3, 0.5f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, -1.0f};
+    unsigned int dt[] = {
+        6, 0, 1,
+        6, 1, 2,
+        6, 2, 3,
+        6, 3, 4,
+        6, 4, 5,
+        6, 5, 0,
+        7, 0, 1,
+        7, 1, 2,
+        7, 2, 3,
+        7, 3, 4,
+        7, 4, 5,
+        7, 5, 0};
+    float verts[36 * 6];
+    for (int a = 0; a < 36; a++)
+    {
+        for (int b = 0; b < 3; b++)
+            verts[6 * a + b] = vertices[3 * dt[a] + b];
+        for (int b = 3; b < 6; b++)
+            verts[6 * a + b] = getCol();
+    }
+    for (int a = 2; a < 17; a += 3)
+        for (int b = 3; b < 6; b++)
+            verts[a * 6 + b] = verts[(a + 2) * 6 + b];
+    for (int a = 22; a < 35; a += 3)
+        for (int b = 3; b < 6; b++)
+            verts[a * 6 + b] = verts[(a + 2) * 6 + b];
+    for (int a = 3; a <= 15; a += 3)
+        for (int b = 3; b < 6; b++)
+            verts[a * 6 + b] = verts[b];
+    for (int a = 21; a <= 33; a += 3)
+        for (int b = 3; b < 6; b++)
+            verts[a * 6 + b] = verts[18 + b];
+    for (int a = 0; a < 36; a++)
+    {
+        for (int b = 0; b < 6; b++)
+            std::cout << verts[6 * a + b] << " ";
+        std::cout << "\n";
+    }
+    return Object(36 * 6, verts);
 }
