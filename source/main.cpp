@@ -138,13 +138,8 @@ int main()
     // as we only have a single shader, we could also just activate our shader once beforehand if we want to
     glUseProgram(shaderProgram);
     //glm stuff
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-    glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    objects[cur].applyMVP(shaderProgram, model, view, projection);
+
+    objects[cur].applyMVP(shaderProgram);
     float ch = -0.01;
 
     // render loop
@@ -155,7 +150,10 @@ int main()
         // -----
         int pressed = processInput(window, cur, objects);
         if (pressed)
+        {
+            objects[cur].applyMVP(shaderProgram);
             objects[cur].bindBuffer(VAO, VBO);
+        }
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -207,6 +205,18 @@ int processInput(GLFWwindow *window, int &cur, Object objects[])
             return 0;
         cur = 2;
     }
+    else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        objects[cur].moveXn();
+    else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        objects[cur].moveXp();
+    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        objects[cur].moveYn();
+    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        objects[cur].moveYp();
+    else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        objects[cur].moveZn();
+    else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        objects[cur].moveZp();
     else
         return 0;
     return 1;

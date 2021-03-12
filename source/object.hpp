@@ -8,10 +8,17 @@ private:
 public:
     float *allVertices;
     int size_allVertices;
+    glm::mat4 model, view, projection;
     Object(int, float *);
     void printAll();
     void bindBuffer(unsigned int VAO, unsigned int VBO);
     void bindIndexArray(unsigned int IBO);
     void draw(unsigned int VAO);
-    void applyMVP(unsigned int shaderProgram, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
+    void applyMVP(unsigned int shaderProgram);
+    void moveXn();
+    void moveXp();
+    void moveYn();
+    void moveYp();
+    void moveZn();
+    void moveZp();
 };
