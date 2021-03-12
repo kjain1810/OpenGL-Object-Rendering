@@ -10,7 +10,7 @@
 #include "utils.hpp"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-int processInput(GLFWwindow *window);
+int processInput(GLFWwindow *, int &, Object[]);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -118,13 +118,14 @@ int main()
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
-    Object obj = createHexDiPyramid();
+    Object objects[] = {createDecagonalPrism(), createHexDiPyramid(), createSqPyramid()};
+    int cur = 0;
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     // first parameter is for number of buffer objects to create
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    obj.bindBuffer(VAO, VBO);
+    objects[cur].bindBuffer(VAO, VBO);
 
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
@@ -138,12 +139,12 @@ int main()
     glUseProgram(shaderProgram);
     //glm stuff
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     glm::mat4 view = glm::mat4(1.0f);
     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     glm::mat4 projection = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    obj.applyMVP(shaderProgram, model, view, projection);
+    objects[cur].applyMVP(shaderProgram, model, view, projection);
     float ch = -0.01;
 
     // render loop
@@ -152,14 +153,15 @@ int main()
     {
         // input
         // -----
-        int pressed = processInput(window);
-
+        int pressed = processInput(window, cur, objects);
+        if (pressed)
+            objects[cur].bindBuffer(VAO, VBO);
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        obj.draw(VAO);
+        objects[cur].draw(VAO);
         // glBindVertexArray(VAO);
         // glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -183,10 +185,31 @@ int main()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-int processInput(GLFWwindow *window)
+int processInput(GLFWwindow *window, int &cur, Object objects[])
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    else if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
+    {
+        if (cur == 0)
+            return 0;
+        cur = 0;
+        return 1;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+    {
+        if (cur == 1)
+            return 0;
+        cur = 1;
+        return 1;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+    {
+        if (cur == 2)
+            return 0;
+        cur = 2;
+        return 1;
+    }
     else
         return 0;
     return 1;
