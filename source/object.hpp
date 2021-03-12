@@ -21,4 +21,5 @@ public:
     void moveYp();
     void moveZn();
     void moveZp();
+    void rotate();
 };

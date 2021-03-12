@@ -217,6 +217,8 @@ int processInput(GLFWwindow *window, int &cur, Object objects[])
         objects[cur].moveZn();
     else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         objects[cur].moveZp();
+    else if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+        objects[cur].rotate();
     else
         return 0;
     return 1;

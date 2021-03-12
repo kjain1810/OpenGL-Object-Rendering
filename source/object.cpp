@@ -76,3 +76,8 @@ void Object::moveZp()
 {
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.01f));
 }
+
+void Object::rotate()
+{
+    model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+}
