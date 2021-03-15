@@ -136,7 +136,6 @@ int main()
     glm::mat4 projection = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
     objects[cur].applyMVP(shaderProgram, cam, projection);
-    float ch = -0.01;
 
     // render loop
     // -----------

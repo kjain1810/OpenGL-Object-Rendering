@@ -80,16 +80,16 @@ void Object::rotate()
 
 void Object::recenter()
 {
-    model = glm::rotate(model, glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(glm::mat4(1.0f), glm::radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 void Object::rotateCamera(Camera &cam)
 {
-    // recenter();
-    cam.angle += 1.0f;
-    if (cam.angle >= 360.0f)
-        cam.angle -= 360.0f;
-    cam.cameraPos = glm::vec3(1.0f, 3 * glm::cos(glm::radians(cam.angle)), 3 * glm::sin(glm::radians(cam.angle)));
+    recenter();
+    glm::mat4 here = glm::rotate(glm::mat4(1.0f), 0.1f, glm::vec3(0.0f, 0.0f, 0.1f));
+    glm::vec4 lmao = here * glm::vec4(cam.cameraPos, 0.0f);
+    cam.cameraPos.x = lmao.x;
+    cam.cameraPos.y = lmao.y;
     cam.makeView();
 }
 
