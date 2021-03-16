@@ -1,6 +1,20 @@
 # Assignment 0
 Assignment 0 of Computer Graphics course.
 
+## Build Instruction
+
+Run the following commands from the source folder
+
+```bash
+mkdir build
+cd build
+cmake ..
+make
+./a0
+```
+
+
+
 ### Instructions
 
 | Key       | Action                                   |
