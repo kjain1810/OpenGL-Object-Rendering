@@ -131,7 +131,7 @@ int main()
     // as we only have a single shader, we could also just activate our shader once beforehand if we want to
     glUseProgram(shaderProgram);
 
-    //glm stuff
+    // create camera and render objects
     Camera cam;
     glm::mat4 projection = glm::mat4(1.0f);
     projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
@@ -144,6 +144,7 @@ int main()
         // input
         // -----
         int pressed = processInput(window, cur, cam, projection, objects);
+        // if a button was pressed, re-render objects
         if (pressed)
         {
             objects[cur].applyMVP(shaderProgram, cam, projection);
@@ -220,9 +221,9 @@ int processInput(GLFWwindow *window, int &cur, Camera &cam, glm::mat4 &projectio
         objects[cur].predef(2, cam);
     else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
         objects[cur].predef(3, cam);
-    else
+    else // return 0 if no button was pressed
         return 0;
-    return 1;
+    return 1; // return 1 if a button was pressed
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
